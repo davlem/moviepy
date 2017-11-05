@@ -1,0 +1,2 @@
+export PYTHONPATH=.:../../liblgb:../../liblgbproject:../../libsport
+python -m unittest $*

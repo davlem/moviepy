@@ -353,6 +353,7 @@ class VideoClip(Clip):
 
         verbose_print(verbose, "[MoviePy] >>>> Video ready: %s \n\n"%filename)
 
+        return True
 
     @requires_duration
     @use_clip_fps_by_default
@@ -827,7 +828,6 @@ class VideoClip(Clip):
         self.audio = self.audio.fx(fun, *a, **k)
 
 
-
 class DataVideoClip(VideoClip):
     """
     Class of video clips whose successive frames are functions
@@ -856,8 +856,6 @@ class DataVideoClip(VideoClip):
         make_frame = lambda t: self.data_to_frame( self.data[int(self.fps*t)])
         VideoClip.__init__(self, make_frame, ismask=ismask,
                duration=1.0*len(data)/fps, has_constant_size=has_constant_size)
-
-
 
 
 class UpdatedVideoClip(VideoClip):
@@ -1057,7 +1055,6 @@ VideoClip.to_videofile = deprecated_version_of(VideoClip.write_videofile,
 VideoClip.to_gif = deprecated_version_of(VideoClip.write_gif, 'to_gif')
 VideoClip.to_images_sequence = deprecated_version_of(VideoClip.write_images_sequence,
                                                'to_images_sequence')
-
 
 class ColorClip(ImageClip):
     """ An ImageClip showing just one color.
