@@ -99,6 +99,8 @@ class DelayedVideoFileClip(VideoClip):
 
         self.pix_fmt= "rgba" if self.has_mask else "rgb24"
 
+        # ~ self._set_reader()
+
     def _set_reader(self, ):
         """set reader method
         """
@@ -141,8 +143,24 @@ class DelayedVideoFileClip(VideoClip):
         # ~ else:
             # ~ self.make_frame = lambda t: self.reader.get_frame(t)
 
+        self.init_audio()
+
+        # free memory
+        del self.reader
+        gc.collect()
+        self.reader = None
+
+    def init_audio(self, ):
+        """init audio method
+        """
+        filename = self.filename
+        audio = self.audio
+        if self.reader is None:
+            self._set_reader()
+
         # Make a reader for the audio, if any.
-        if audio and self.reader.infos['audio_found']:
+        _read_audio = self.reader.infos['audio_found']
+        if audio and _read_audio:
             self.audio = DelayedAudioFileClip(
                 filename,
                 buffersize=self.audio_buffersize,
@@ -150,11 +168,8 @@ class DelayedVideoFileClip(VideoClip):
                 nbytes=self.audio_nbytes
                 )
             self.audio.init()
-
-        # free memory
-        del self.reader
-        gc.collect()
-        self.reader = None
+        else:
+            self.audio = None
 
     def make_frame(self, t):
         """make frame method
