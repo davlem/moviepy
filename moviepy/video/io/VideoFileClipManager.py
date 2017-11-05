@@ -67,15 +67,16 @@ class VideoFileClipManager(list):
 
         return _re
 
-    def write_videofile(self, filename):
+    def write_videofile(self, *args, **kwargs):
         """write videofile with all clips in collection method
         """
         # ----
         # need init all videoclips
         # ----
+        _vfn = args[0]
         self._init_clips()
         _re = concatenate_videoclips(self)
-        _re = _re.write_videofile(filename)
+        _re = _re.write_videofile(_vfn, **kwargs)
         return _re
 
     def __repr__(self, ):
