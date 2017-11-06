@@ -186,7 +186,10 @@ class Fast_FFMPEG_VideoReader:
             return result
 
     def close(self):
-        _proc = self.proc
+        try:
+            _proc = self.proc
+        except Exception as _err:
+            _proc = None
         if _proc is not None:
             # ~ if hasattr(self, 'proc'):
             self.proc.terminate()

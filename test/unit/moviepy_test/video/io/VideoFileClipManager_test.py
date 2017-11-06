@@ -57,25 +57,8 @@ class test_VideoFileClipManager(unittest.TestCase):
             (
                 # ouput, video_list
                 (
-                        '01Y9dI_videosport.webm',
-                        (
-                        'part_2hAiyH_videosport.webm',
-                        'part_5rQCba_videosport.webm',
-                        'part_7jqySb_videosport.webm',
-                        'part_bbx90Q_videosport.webm',
-                        'part_DgRTqh_videosport.webm',
-                        'part_EqudBP_videosport.webm',
-                        'part_FCNMxq_videosport.webm',
-                        'part_FE6fET_videosport.webm',
-                        'part_fgxLAB_videosport.webm',
-                        'part_gOfxxj_videosport.webm',
-                        'part_O8lsvI_videosport.webm',
-                        'part_q9Yhme_videosport.webm',
-                        'part_sUCOhv_videosport.webm',
-                        'part_TnuJSk_videosport.webm',
-                        'part_UD8kK6_videosport.webm',
-                        'part_ulUbFj_videosport.webm',
-                        ),
+                        'big_buck_bunny_432_433.webm',
+                        ['big_buck_bunny_432_433.webm'] * 5,
                     ),
                 ),
 
@@ -88,7 +71,7 @@ class test_VideoFileClipManager(unittest.TestCase):
 
             # method_join_big_videoclips_files
             (
-                (True)
+                (True),
                 ),
 
             )
@@ -107,6 +90,7 @@ class test_VideoFileClipManager(unittest.TestCase):
             show=True,
             )
         self.assertEqual(_me.duration, 160.0)
+        _me.close()
 
     def test_method_join_big_videoclips_files(self, ):
         _in, _me = 1, _mo.VideoFileClipManager()
@@ -131,7 +115,9 @@ class test_VideoFileClipManager(unittest.TestCase):
                 )
 
             _r0 = self._r0[_in][_n0]
-            self.assertEqual(_d0, _r0)
+            self.assertEqual(_re, _r0)
+
+        _me.close()
 
 
 if __name__=='__main__':
