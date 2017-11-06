@@ -199,6 +199,7 @@ class test_DelayedVideoFileClip(unittest.TestCase):
             _r0 = self._r0[_in][_n0]
             # target_resolution
             self.assertEqual(_d0, _r0)
+        _ob.close()
 
     def test_concatenate_videoclips_method(self, ):
         # init required

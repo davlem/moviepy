@@ -12,7 +12,7 @@ from moviepy.editor import (
 class VideoFileClipManager(list):
     """Video File Clip Manager object
     
-    Manage multiple video file clips for don't read the same file mny times.
+    Manage multiple video file clips for don't read the same file many times.
     """
 
     def __init__(self, *args, **kwargs):
@@ -77,7 +77,17 @@ class VideoFileClipManager(list):
         self._init_clips()
         _re = concatenate_videoclips(self)
         _re = _re.write_videofile(_vfn, **kwargs)
+        
+        # close all VideoFileClip
+        
         return _re
+    
+    def close(self, ):
+        """close method
+        """
+        for _e0 in self:
+            if _e0.reader is not None:
+                _e0.reader.close()
 
     def __repr__(self, ):
         """repr method doc
