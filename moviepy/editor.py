@@ -17,8 +17,21 @@ clip.preview().
 # Note that these imports could have been performed in the __init__.py
 # file, but this would make the loading of moviepy slower.
 
+import os
+import sys
+
+# Downloads ffmpeg if it isn't already installed
+import imageio
+# Checks to see if the user has set a place for their own version of ffmpeg
+
+if os.getenv('FFMPEG_BINARY', 'ffmpeg-imageio') == 'ffmpeg-imageio':
+    if sys.version_info < (3, 4):
+        #uses an old version of imageio with ffmpeg.download.
+        imageio.plugins.ffmpeg.download()
+
 # Clips
 from .video.io.video_file_clip import VideoFileClip
+# ~ from .video.io.VideoFileClip import VideoFileClip
 from .video.io.ImageSequenceClip import ImageSequenceClip
 from .video.io.downloader import download_webfile
 from .video.VideoClip import VideoClip, ImageClip, ColorClip, TextClip
@@ -52,6 +65,7 @@ except ImportError:
 for method in [
           "afx.audio_fadein",
           "afx.audio_fadeout",
+          "afx.audio_normalize",
           "afx.volumex",
           "transfx.crossfadein",
           "transfx.crossfadeout",
@@ -68,12 +82,13 @@ for method in [
           "vfx.speedx"
           ]:
 
-    exec("VideoClip.%s = %s"%( method.split('.')[1], method))
+    exec("VideoClip.%s = %s" % (method.split('.')[1], method))
 
 
 for method in ["afx.audio_fadein",
                "afx.audio_fadeout",
                "afx.audio_loop",
+               "afx.audio_normalize",
                "afx.volumex"
               ]:
 
@@ -95,6 +110,7 @@ except ImportError:
     def preview(self, *args, **kwargs):
         """NOT AVAILABLE : clip.preview requires Pygame installed."""
         raise ImportError("clip.preview requires Pygame installed")
+
     def show(self, *args, **kwargs):
         """NOT AVAILABLE : clip.show requires Pygame installed."""
         raise ImportError("clip.show requires Pygame installed")
