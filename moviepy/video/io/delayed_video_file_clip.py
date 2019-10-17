@@ -1,12 +1,17 @@
-import os
+"""
+Delayed Video File Clip module.
+"""
+
+#pylint: disable=method-hidden
+
 import gc
 
 from moviepy.core import (
     get_key_or_default,
-    )
+)
 from moviepy.video.VideoClip import VideoClip
 from moviepy.audio.io.DelayedAudioFileClip import DelayedAudioFileClip
-from moviepy.Clip import Clip
+# ~ from moviepy.Clip import Clip
 from moviepy.video.io.fast_ffmpeg_reader import Fast_FFMPEG_VideoReader
 # ~ from moviepy.video.io.ffmpeg_reader import FFMPEG_VideoReader
 
@@ -15,7 +20,8 @@ class DelayedVideoFileClip(VideoClip):
 
     """
 
-    A video clip originating from a movie file with delayed file load. For instance: ::
+    A video clip originating from a movie file with delayed file load.
+    For instance: ::
 
         >>> clip = VideoFileClip("myHolidays.mp4")
         >>> clip2 = VideoFileClip("myMaskVideo.avi")
@@ -64,40 +70,47 @@ class DelayedVideoFileClip(VideoClip):
 
     fps:
       Frames per second in the original file.
-    
-    
+
+
     Read docs for Clip() and VideoClip() for other, more generic, attributes.
 
     """
 
-    def __init__(self,
-        *args, **kwargs
-        # ~ filename, has_mask=False,
-        # ~ audio=True, audio_buffersize = 200000,
-        # ~ target_resolution=None, resize_algorithm='bicubic',
-        # ~ audio_fps=44100, audio_nbytes=2, verbose=False,
-        # ~ fps_source='tbr'
-        ):
+    def __init__(
+            self,
+            *args, **kwargs
+            # ~ filename, has_mask=False,
+            # ~ audio=True, audio_buffersize = 200000,
+            # ~ target_resolution=None, resize_algorithm='bicubic',
+            # ~ audio_fps=44100, audio_nbytes=2, verbose=False,
+            # ~ fps_source='tbr'
+    ):
 
         VideoClip.__init__(self)
-        
+
         self._ar = _ar = args, kwargs
         _kw = _ar[1]
 
+        self.rotation = None
+        self.fps = None
         # Make a reader
-        self.reader = None # need this just in case FFMPEG has issues (__del__ complains)
+        # need this just in case FFMPEG has issues (__del__ complains)
+        self.reader = None
         self.filename = _ar[0][0]
         self.has_mask = get_key_or_default('has_mask', False, _kw)
         self.audio = get_key_or_default('audio', True, _kw)
-        self.audio_buffersize = get_key_or_default('audio_buffersize', 200000, _kw)
-        self.target_resolution = get_key_or_default('target_resolution', None, _kw)
-        self.resize_algorithm = get_key_or_default('resize_algorithm', 'bicubic', _kw)
+        self.audio_buffersize = get_key_or_default(
+            'audio_buffersize', 200000, _kw)
+        self.target_resolution = get_key_or_default(
+            'target_resolution', None, _kw)
+        self.resize_algorithm = get_key_or_default(
+            'resize_algorithm', 'bicubic', _kw)
         self.audio_fps = get_key_or_default('audio_fps', 44100, _kw)
         self.audio_nbytes = get_key_or_default('audio_nbytes', 2, _kw)
         self.verbose = get_key_or_default('verbose', False, _kw)
         self.fps_source = get_key_or_default('fps_source', 'tbr', _kw)
 
-        self.pix_fmt= "rgba" if self.has_mask else "rgb24"
+        self.pix_fmt = "rgba" if self.has_mask else "rgb24"
 
         # ~ self._set_reader()
 
@@ -111,14 +124,14 @@ class DelayedVideoFileClip(VideoClip):
             resize_algo=self.resize_algorithm,
             fps_source=self.fps_source,
             # ~ print_infos=True,
-            )
+        )
 
     def init(self, ):
         """init load clip method
         """
-        filename = self.filename
+        # ~ filename = self.filename  # not used
         has_mask = self.has_mask
-        audio = self.audio
+        # ~ audio = self.audio  # not used
 
         self._set_reader()
 
@@ -134,10 +147,19 @@ class DelayedVideoFileClip(VideoClip):
 
         if has_mask:
 
-            self.make_frame = lambda t: self.reader.get_frame(t)[:,:,:3]
-            mask_mf =  lambda t: self.reader.get_frame(t)[:,:,3]/255.0
-            self.mask = (VideoClip(ismask = True, make_frame = mask_mf)
-                       .set_duration(self.duration))
+            self.make_frame = lambda t: self.reader.get_frame(t)[:, :, :3]
+
+            def mask_mf(frame_):
+                """get frame mask
+                """
+                return self.reader.get_frame(frame_)[:, :, 3] / 255.0
+
+            self.mask = (
+                VideoClip(
+                    ismask=True,
+                    make_frame=mask_mf
+                ).set_duration(self.duration)
+            )
             self.mask.fps = self.fps
 
         # ~ else:
@@ -166,17 +188,17 @@ class DelayedVideoFileClip(VideoClip):
                 buffersize=self.audio_buffersize,
                 fps=self.audio_fps,
                 nbytes=self.audio_nbytes
-                )
+            )
             self.audio.init()
         else:
             self.audio = None
 
-    def make_frame(self, t):
+    def make_frame(self, frame_):
         """make frame method
         """
         if self.reader is None:
             self._set_reader()
-        return self.reader.get_frame(t)
+        return self.reader.get_frame(frame_)
 
     def __del__(self):
         """ Close/delete the internal reader. """

@@ -2,7 +2,7 @@
 """
 
 import unittest2 as unittest
-from moviepy.video.io import DelayedVideoFileClip as _mo
+from moviepy.video.io import delayed_video_file_clip as _mo
 from moviepy.video.io import fast_ffmpeg_reader as _mo0
 from moviepy import editor as _mo1
 

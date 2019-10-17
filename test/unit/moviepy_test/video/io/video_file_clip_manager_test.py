@@ -10,7 +10,7 @@ import unittest2 as unittest
 from test.unit._core import (
     count_elapsed_time,
     )
-from moviepy.video.io import VideoFileClipManager as _mo
+from moviepy.video.io import video_file_clip_manager as _mo
 
 
 def get_test_tmp_path():
@@ -62,7 +62,7 @@ class test_VideoFileClipManager(unittest.TestCase):
         self._d0 = (
             # method_method
             (0, 1, 2, 3,),
-            
+
             # method_join_big_videoclips_files
             # test_method_join_big_videoclips_files_thread
             (
@@ -95,7 +95,7 @@ class test_VideoFileClipManager(unittest.TestCase):
             for _e0 in range(160):
                 _me.load_file_clip(self._video_test_name)
             return _me
-            
+
         _me, _time = count_elapsed_time(
             _load_many_video_clips,
             ((), {}),
@@ -121,7 +121,7 @@ class test_VideoFileClipManager(unittest.TestCase):
                 show=True
                 )
             _re, _time = count_elapsed_time(
-                _me.write_videofile, 
+                _me.write_videofile,
                 ((get_test_tmp_path_for_file(_e0[0]),), {}),
                 show=True,
                 )
@@ -156,7 +156,7 @@ class test_VideoFileClipManager(unittest.TestCase):
                 show=True
                 )
             _re, _time = count_elapsed_time(
-                _me.write_videofile, 
+                _me.write_videofile,
                 ((get_test_tmp_path_for_file(_e0[0]),), {}),
                 show=True,
                 )

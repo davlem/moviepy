@@ -2,7 +2,7 @@
 moviepy.video.io - VideoFileClipManager module.
 """
 
-from DelayedVideoFileClip import (
+from delayed_video_file_clip import (
     DelayedVideoFileClip,
     )
 from moviepy.editor import (
@@ -11,7 +11,7 @@ from moviepy.editor import (
 
 class VideoFileClipManager(list):
     """Video File Clip Manager object
-    
+
     Manage multiple video file clips for don't read the same file many times.
     """
 
@@ -51,7 +51,7 @@ class VideoFileClipManager(list):
     @property
     def duration(self,):
         """duration method
-        
+
         sum all videoclips durations
         """
         _re = 0
@@ -77,11 +77,11 @@ class VideoFileClipManager(list):
         self._init_clips()
         _re = concatenate_videoclips(self)
         _re = _re.write_videofile(_vfn, **kwargs)
-        
+
         # close all VideoFileClip
-        
+
         return _re
-    
+
     def close(self, ):
         """close method
         """

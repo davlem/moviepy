@@ -18,8 +18,7 @@ clip.preview().
 # file, but this would make the loading of moviepy slower.
 
 # Clips
-
-from .video.io.VideoFileClip import VideoFileClip
+from .video.io.video_file_clip import VideoFileClip
 from .video.io.ImageSequenceClip import ImageSequenceClip
 from .video.io.downloader import download_webfile
 from .video.VideoClip import VideoClip, ImageClip, ColorClip, TextClip
@@ -48,7 +47,7 @@ except ImportError:
     pass
 
 # The next loop transforms many effects into VideoClip methods so that
-# they can be walled with myclip.resize(width=500) instead of 
+# they can be walled with myclip.resize(width=500) instead of
 # myclip.fx( vfx.resize, width= 500)
 for method in [
           "afx.audio_fadein",
@@ -77,8 +76,8 @@ for method in ["afx.audio_fadein",
                "afx.audio_loop",
                "afx.volumex"
               ]:
-              
-    exec("AudioClip.%s = %s"%( method.split('.')[1], method))
+
+    exec("AudioClip.%s = %s" % (method.split('.')[1], method))
 
 
 # adds easy ipython integration

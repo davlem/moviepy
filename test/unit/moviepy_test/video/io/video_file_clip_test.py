@@ -3,7 +3,7 @@
 
 import resource
 import unittest2 as unittest
-from moviepy.video.io import VideoFileClip as _mo
+from moviepy.video.io import video_file_clip as _mo
 
 def _print_memory_usage():
     """print memory usage method
@@ -78,8 +78,8 @@ class test_VideoFileClip(unittest.TestCase):
                 ]
             _r0 = self._r0[_in][_n0]
             # ~ _print_memory_usage()
-            import pdb; pdb.set_trace()
-            self.assertEqual(_d0.duration, _r0)
+            # ~ import pdb; pdb.set_trace()
+            self.assertEqual(_d0[0][0].duration, _r0)
 
 
 _to_test = [
